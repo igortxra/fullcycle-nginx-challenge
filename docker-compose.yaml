@@ -1,0 +1,39 @@
+services:
+
+  proxy:
+    build: 
+      context: nginx
+    container_name: nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      application:
+        condition: service_started
+
+  application:
+    build:
+      context: app
+    container_name: application
+    ports:
+      - "3000:3000"
+    depends_on:
+      database:
+        condition: service_healthy
+
+  database:
+    image: mysql
+    container_name: database
+    command: --innodb-use-native-aio=0
+    environment:
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: app
+      MYSQL_PASSWORD: 123
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - "./mysql:/var/lib/mysql"
+      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
+    healthcheck:
+      test: ["CMD", "mysql", "-hlocalhost", "-uroot", "-proot", "--silent", "-e", "USE appdb; SHOW TABLES LIKE 'people';"]
+      timeout: 10s
+      retries: 18
+
