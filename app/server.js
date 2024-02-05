@@ -4,11 +4,11 @@ const mysql = require('mysql2');
 const app = express()
 const port = 3000
 
-app.get('/', (req, res) => {
-  const con = mysql.createConnection({
-    host: "database", user: "root", password: "root", database: "appdb"
-  });
+const con = mysql.createConnection({
+  host: "database", user: "root", password: "root", database: "appdb"
+});
 
+app.get('/', (req, res) => {
 
   con.query(`INSERT INTO people (name) VALUES ('Igor')`, function(err, _, _) {
     if (err) {
