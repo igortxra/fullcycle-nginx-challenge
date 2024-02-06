@@ -2,10 +2,10 @@ FROM node:latest
 
 WORKDIR /usr/src/app
 
-RUN npm install express mysql2 
-
-COPY ./server.js ./
+RUN npm install --save express mysql2 
 
 EXPOSE 3000
+
+COPY . .
 
 CMD [ "node", "server.js" ]

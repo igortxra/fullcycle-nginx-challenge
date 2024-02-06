@@ -19,6 +19,10 @@ services:
     depends_on:
       database:
         condition: service_healthy
+    tty: true
+    volumes:
+      - ./app:/usr/src/app
+      - /usr/src/app/node_modules
 
   database:
     image: mysql
